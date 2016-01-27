@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3 text-center">
+        <h2>Desk {{desk_id}} history</h2>
+    </div>
+
+    <div class="col-lg-10 col-lg-offset-1 text-center">
+
+        <table class="table">
+            <thead>
+            <th class="text-left" style="width: 15em;">Date</th>
+            <th class="text-left">Results</th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="history in ::desk_history">
+                <td class="text-left">{{::history.modified}}</td>
+                <td class="text-left">
+                        <span ng-repeat="player in ::history.state">
+                            <label class="label {{::player.styles}}">{{::player.name}} : {{::player.card}}</label>&nbsp;
+                        </span>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

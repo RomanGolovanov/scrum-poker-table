@@ -1,0 +1,26 @@
+.nav, .pagination, .carousel, .panel-title a, section a, li a { cursor: pointer; }
+
+.page-content{
+	margin-top: 50px;
+}
+
+.card
+{
+    display:inline-block;
+}
+
+body {
+    background-color: rgba(0, 0, 0, .04);
+}
+
+section{
+    padding-top:2em;
+}
+
+.qr-footer div {
+    padding-bottom:5px;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}

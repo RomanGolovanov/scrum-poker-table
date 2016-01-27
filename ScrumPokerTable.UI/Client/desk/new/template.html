@@ -1,0 +1,50 @@
+<div class="row">
+
+    <div class="col-lg-4 col-lg-offset-4 text-center">
+        <h2>Play Desk</h2>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>Create a new play desk</h3>
+            </div>
+            <div class="panel-body">
+                <form class="form-inline" novalidate>
+                    <div class="btn-group" dropdown>
+                        <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
+                            {{state.desk_type}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
+                            <li role="menuitem" ng-repeat="(key, value) in desk_types">
+                                <a ng-click="state.desk_type=key">{{key}}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary" ng-click="create()">Create</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>... or open existing one</h3>
+            </div>
+            <div class="panel-body">
+                <form name="connectForm" class="form-inline" novalidate>
+                    <div class="form-group">
+                        <label class="sr-only" for="deskId">Desk ID</label>
+
+                        <div class="input-group">
+                            <input autofocus required type="text" class="form-control" id="deskId" name="deskId" placeholder="Desk ID" ng-model="desk_id">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-click="connect(desk_id)">Connect</button>
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

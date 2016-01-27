@@ -1,0 +1,24 @@
+<div class="row">
+
+    <div class="col-lg-6 col-lg-offset-3 text-center">
+        <h2>Master</h2>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3>Connect to existing play desk as Scrum master</h3>
+            </div>
+            <div class="panel-body">
+                <form name="connectForm" class="form-inline" novalidate>
+
+                    <div class="form-group">
+                        <label class="sr-only" for="deskId">Desk ID</label>
+                        <input autofocus required type="text" class="form-control" id="deskId" name="deskId"
+                               placeholder="Desk ID" ng-model="desk_id" ng-disabled="desk_id_locked">
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-click="connect()">Connect
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ScrumPokerTable">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Scrum Poker</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <link href="components/animations/css/animations.min.css" rel="stylesheet">
+    <link href="components/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="components/desk-cards/cards.css" rel="stylesheet">
+
+    <!-- <link href="components/font-awesome/css/font-awesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    
+    <link href="Client/app.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body ng-cloak>
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container" ng-controller="HeaderController">
+      <div class="navbar-header">
+        <a href="#/" class="navbar-brand">Scrum Poker</a>
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar-main">
+        <ul class="nav navbar-nav">
+          <li ng-class="{ active: isActive('/desk') }">
+              <a href="#/desk">Game Desk</a>
+          </li>
+        </ul>
+          <ul class="nav navbar-nav">
+              <li ng-class="{ active: isActive('/master') }">
+                  <a href="#/master">Master</a>
+              </li>
+          </ul>
+          <ul class="nav navbar-nav">
+              <li ng-class="{ active: isActive('/player') }">
+                  <a href="#/player">Player</a>
+              </li>
+          </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-class="{ active: isActive('/about') }">
+            <a href="#/about" >About</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container page-content">
+    <ng-view/>
+  </div>
+
+
+  <script src="components/polyfills/startswith.js"></script>
+  <script src="components/polyfills/find.js"></script>
+  <script src="components/polyfills/strings.js"></script>
+
+  <script src="components/jquery/jquery.min.js"></script>
+  <script src="components/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="components/qrcode/qrcode.js"></script>
+
+
+  <script src="components/angular/angular.min.js"></script>
+  <script src="components/angular/angular-aria.min.js"></script>
+  <script src="components/angular/angular-route.min.js"></script>
+  <script src="components/angular/angular-resource.min.js"></script>
+  <script src="components/angular/angular-animate.min.js"></script>
+  <script src="components/angular/angular-cookies.min.js"></script>
+  <script src="components/angular-qrcode/angular-qrcode.js"></script>
+
+  <script src="components/ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="components/angular-clipboard/angular-clipboard.js"></script>
+
+  <script src="Client/app.js"></script>
+
+  <script src="Client/directives/deskview.js"></script>
+
+  <script src="Client/desk/new/controller.js"></script>
+  <script src="Client/desk/play/controller.js"></script>
+  <script src="Client/desk/history/controller.js"></script>
+  <script src="Client/desk/service.js"></script>
+
+  <script src="Client/master/connect/controller.js"></script>
+  <script src="Client/master/play/controller.js"></script>
+
+  <script src="Client/player/connect/controller.js"></script>
+  <script src="Client/player/play/controller.js"></script>
+  <script src="Client/player/service.js"></script>
+
+</body>
+</html>
