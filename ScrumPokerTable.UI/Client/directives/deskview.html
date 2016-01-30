@@ -1,17 +1,17 @@
 <div class="col-lg-10 col-lg-offset-1 text-center">
     <h2 class="text-capitalize">{{stateName}}</h2>
     <section class="pull-center">
-        <div class="card" ng-repeat="player in players | orderBy:'name'">
+        <div class="card" ng-repeat="user in users | orderBy:'name'">
             <div class="text-left">
-                <h5 class="text-capitalize">{{player.name}}</h5>
-                <h6 ng-show="player.card"><span class="label label-success">Ready</span></h6>
-                <h6 ng-hide="player.card"><span class="label label-danger">Waiting...</span></h6>
+                <h5 class="text-capitalize">{{user.name}}</h5>
+                <h6 ng-show="user.card"><span class="label label-success">Ready</span></h6>
+                <h6 ng-hide="user.card"><span class="label label-danger">Waiting...</span></h6>
                 <div class="playingCards">
-                    <div ng-if="!show(player)" class="card rank-1">
+                    <div ng-if="!show(user)" class="card rank-1">
                         <span class="rank">?</span>
                     </div>
-                    <div ng-if="show(player)" class="card rank-1" ng-style="getCardStyle(player)">
-                        <span class="rank">{{player.card ? player.card : '?'}}</span>
+                    <div ng-if="show(user)" class="card rank-1" ng-style="getCardStyle(user)">
+                        <span class="rank">{{user.card ? user.card : '?'}}</span>
                     </div>
                 </div>
             </div>

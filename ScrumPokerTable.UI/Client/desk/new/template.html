@@ -11,11 +11,11 @@
                 <form class="form-inline" novalidate>
                     <div class="btn-group" dropdown>
                         <button id="single-button" type="button" class="btn btn-primary" dropdown-toggle>
-                            {{state.desk_type}} <span class="caret"></span>
+                            {{state.deskType}} <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
-                            <li role="menuitem" ng-repeat="(key, value) in desk_types">
-                                <a ng-click="state.desk_type=key">{{key}}</a>
+                            <li role="menuitem" ng-repeat="(key, value) in deskTypes">
+                                <a ng-click="state.deskType=key">{{key}}</a>
                             </li>
                         </ul>
                     </div>
@@ -36,10 +36,10 @@
                         <label class="sr-only" for="deskId">Desk ID</label>
 
                         <div class="input-group">
-                            <input autofocus required type="text" class="form-control" id="deskId" name="deskId" placeholder="Desk ID" ng-model="desk_id">
+                            <input autofocus required type="text" class="form-control" id="deskId" name="deskId" placeholder="Desk ID" ng-model="deskName">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" ng-click="connect(desk_id)">Connect</button>
+                    <button type="submit" class="btn btn-primary" ng-click="connect(deskName)">Connect</button>
                 </form>
             </div>
         </div>

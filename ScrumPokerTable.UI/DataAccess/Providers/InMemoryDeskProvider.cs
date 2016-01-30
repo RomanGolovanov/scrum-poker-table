@@ -8,13 +8,11 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
 {
     public class InMemoryDeskProvider : IDeskProvider
     {
-        public InMemoryDeskProvider()
+        public InMemoryDeskProvider(IDeskNameProvider deskNameProvider)
         {
+            _deskNameProvider = deskNameProvider;
             _desks = new List<DeskEntity>();
             _users = new List<DeskUserEntity>();
-
-            //TODO: remove after debug!
-            CreateDesk("d1", Enumerable.Range(1, 15).Select(x => x.ToString()).ToArray());
         }
 
         public DeskEntity GetDesk(string deskName)
@@ -43,19 +41,24 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
             return user;
         }
 
-        public void CreateDesk(string deskName, string[] cards)
+        public string CreateDesk(string[] cards)
         {
-            if (_desks.Any(x => x.Name == deskName))
+            while (true)
             {
-                throw new DeskLogicException(string.Format("Desk {0} already exists", deskName));
+                var deskName = _deskNameProvider.GetNewDeskName();
+                if(_desks.Any(x=>x.Name == deskName))
+                    continue;
+
+                _desks.Add(new DeskEntity
+                {
+                    Name = deskName,
+                    Cards = cards,
+                    State = DeskState.Voting,
+                    Timestamp = DateTime.UtcNow
+                });
+
+                return deskName;
             }
-            _desks.Add(new DeskEntity
-            {
-                Name = deskName,
-                Cards = cards,
-                State = DeskState.Display,
-                Timestamp = DateTime.UtcNow
-            });
         }
 
         public void DeleteDesk(string deskName)
@@ -105,11 +108,13 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
             user.Card = card;
             if (GetDeskUsers(deskName).All(x=>x.Card!=null) && desk.State == DeskState.Voting)
             {
-                desk.State = DeskState.Display;
+                //desk.State = DeskState.Display;
             }
             desk.Timestamp = DateTime.UtcNow;
 
         }
+
+        private readonly IDeskNameProvider _deskNameProvider;
 
         private readonly List<DeskEntity> _desks;
         private readonly List<DeskUserEntity> _users;

@@ -5,13 +5,19 @@ namespace ScrumPokerTable.UI.Hubs
 {
     public interface IDeskServer
     {
+        string CreateDesk(string[] cards);
+
+        void DeleteDesk(string deskName);
+
+
         Task JoinAsUser(string deskName, string userName);
 
         Task JoinAsMaster(string deskName);
 
-        void CreateDesk(string deskName, string[] cards);
+        Task Leave(string deskName);
 
-        void DeleteDesk(string deskName);
+
+        Desk GetDesk(string deskName);
 
         void SetUserCard(string deskName, string userName, string card);
 

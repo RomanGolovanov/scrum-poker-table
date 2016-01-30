@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
-using ScrumPokerTable.UI.DataAccess;
+using ScrumPokerTable.UI.DataAccess.Providers;
 using ScrumPokerTable.UI.Model;
 
 namespace ScrumPokerTable.UI.Hubs
@@ -13,9 +13,9 @@ namespace ScrumPokerTable.UI.Hubs
             _deskProvider = deskProvider;
         }
 
-        public void CreateDesk(string deskName, string[] cards)
+        public string CreateDesk(string[] cards)
         {
-            _deskProvider.CreateDesk(deskName, cards);
+            return _deskProvider.CreateDesk(cards);
         }
 
         public void DeleteDesk(string deskName)
@@ -40,7 +40,26 @@ namespace ScrumPokerTable.UI.Hubs
 
         public async Task Leave(string deskName)
         {
+            EnsureDeskExists(deskName);
             await Groups.Remove(Context.ConnectionId, deskName);
+            Clients.Group(deskName).DeskChanged(GetDesk(deskName));
+        }
+
+        public Desk GetDesk(string deskName)
+        {
+            var desk = _deskProvider.GetDesk(deskName);
+            return new Desk
+            {
+                Name = desk.Name,
+                Cards = desk.Cards,
+                State = desk.State,
+                Timestamp = desk.Timestamp,
+                Users = _deskProvider.GetDeskUsers(deskName).Select(x => new DeskUser
+                {
+                    Name = x.Name,
+                    Card = x.Card
+                }).ToArray()
+            };
         }
 
         public void SetUserCard(string deskName, string userName, string card)
@@ -60,23 +79,6 @@ namespace ScrumPokerTable.UI.Hubs
         private void EnsureDeskExists(string deskName)
         {
             _deskProvider.GetDesk(deskName);
-        }
-
-        private Desk GetDesk(string deskName)
-        {
-            var desk = _deskProvider.GetDesk(deskName);
-            return new Desk
-            {
-                Name = desk.Name,
-                Cards = desk.Cards,
-                State = desk.State,
-                Timestamp = desk.Timestamp,
-                Users = _deskProvider.GetDeskUsers(deskName).Select(x => new DeskUser
-                {
-                    Name = x.Name,
-                    Card = x.Card
-                }).ToArray()
-            };
         }
 
         #endregion

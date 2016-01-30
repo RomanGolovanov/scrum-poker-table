@@ -4,14 +4,14 @@
 <div class="row">
 	<div class="col-lg-10 col-lg-offset-1 text-center">
         <section>
-            <button class="btn btn-primary" ng-click="connectAsPlayer()">Connect as player</button>
-            <button class="btn btn-primary" ng-click="connectAsMaster()">Connect as master</button>
+            <button class="btn btn-primary" ng-click="joinAsUser()">Connect as player</button>
+            <button class="btn btn-primary" ng-click="joinAsMaster()">Connect as master</button>
             <button class="btn btn-primary" ng-click="showHistory()">History</button>
-            <button class="btn btn-danger" ng-click="removeGame()">Delete desk</button>
+            <button class="btn btn-danger" ng-click="deleteDesk()">Delete desk</button>
         </section>
         <section class="qr-footer">
-            <div>Connect to this game using code <strong>{{desk_id}}</strong> or <strong>QR code</strong></div>
-            <qrcode error-correction-level="M" size="200" data="{{desk_url}}"></qrcode>
+            <div>Connect to this game using code <strong>{{deskName}}</strong> or <strong>QR code</strong></div>
+            <qrcode error-correction-level="M" size="200" data="{{deskUrl}}"></qrcode>
         </section>
 	</div>
 </div>

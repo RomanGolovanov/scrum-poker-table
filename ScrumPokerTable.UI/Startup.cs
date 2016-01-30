@@ -18,9 +18,10 @@ namespace ScrumPokerTable.UI
         private static void ConfigureWebApi(IAppBuilder app, IUnityContainer container)
         {
             var config = new HttpConfiguration();
+            config.DependencyResolver = new WebApiDependencyResolver(container);
             config.Routes.MapHttpRoute(
                 name: "WebApi",
-                routeTemplate: "api/1.0/{controller}",
+                routeTemplate: "api/1.0/{controller}/{id}",
                 defaults: new {id = RouteParameter.Optional});
             
             app.UseWebApi(config);

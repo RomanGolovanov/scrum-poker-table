@@ -129,7 +129,7 @@
     <Content Include="Client\desk\new\template.html" />
     <Content Include="Client\desk\play\controller.js" />
     <Content Include="Client\desk\play\template.html" />
-    <Content Include="Client\desk\service.js" />
+    <Content Include="Client\service.js" />
     <Content Include="Client\directives\deskview.html" />
     <Content Include="Client\directives\deskview.js" />
     <Content Include="Client\master\connect\controller.js" />
@@ -140,7 +140,6 @@
     <Content Include="Client\player\connect\template.html" />
     <Content Include="Client\player\play\controller.js" />
     <Content Include="Client\player\play\template.html" />
-    <Content Include="Client\player\service.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -219,15 +218,19 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="DataAccess\Entities\DeskEntity.cs" />
     <Compile Include="DataAccess\Entities\DeskUserEntity.cs" />
-    <Compile Include="DataAccess\IDeskProvider.cs" />
+    <Compile Include="DataAccess\Providers\IDeskNameProvider.cs" />
+    <Compile Include="DataAccess\Providers\IDeskProvider.cs" />
+    <Compile Include="DataAccess\Providers\DeskNameProvider.cs" />
     <Compile Include="DataAccess\Providers\InMemoryDeskProvider.cs" />
     <Compile Include="DataAccess\DeskLogicException.cs" />
     <Compile Include="Hubs\DeskHub.cs" />
     <Compile Include="Hubs\IDeskClient.cs" />
     <Compile Include="Hubs\IDeskServer.cs" />
+    <Compile Include="IoC\WebApiDependencyResolver.cs" />
     <Compile Include="IoC\UnityContainerFactory.cs" />
     <Compile Include="IoC\SignalrDependencyResolver.cs" />
     <Compile Include="Model\Desk.cs" />

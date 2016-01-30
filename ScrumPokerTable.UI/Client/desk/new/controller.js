@@ -1,27 +1,28 @@
-(function(){
-  angular
-    .module("ScrumPokerTable")
-    .controller("NewDeskController", ["$scope", "$location", "DeskService", function($scope, $location, deskService){
+(function() {
+    angular
+        .module("ScrumPokerTable")
+        .controller("NewDeskController", [
+            "$scope", "$location", "DeskHubService", function($scope, $location, deskHubService) {
 
-        $scope.desk_types = {
-            "Natural numbers" : ["?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"],
-            "Fibonacchi numbers" : ["?", "1", "2", "3", "5", "8", "13", "20", "40"]
-        };
-        $scope.state = {
-            desk_type: "Fibonacchi numbers"
-        };
+                $scope.deskTypes = {
+                    "Natural numbers": ["?", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"],
+                    "Fibonacchi numbers": ["?", "1", "2", "3", "5", "8", "13", "20", "40"]
+                };
+                $scope.state = {
+                    deskType: "Natural numbers"
+                };
 
-        $scope.connect = function(desk_id){
-            deskService.connect(desk_id).then(function(desk_id){
-                if(!desk_id) return;
-                $location.path("/desk/" + desk_id);
-            });
-        }
-        $scope.create = function(){
-            deskService.create($scope.desk_types[$scope.state.desk_type]).then(function(desk_id){
-                $location.path("/desk/" + desk_id);
-            });
-        }
-    }])
-  ;
+                $scope.connect = function(deskName) {
+                    deskHubService.joinAsMaster(deskName).then(function () {
+                        $location.path("/desk/" + deskName);
+                    }, function (error) { console.error(error); });
+                };
+
+                $scope.create = function() {
+                    deskHubService.createDesk($scope.deskTypes[$scope.state.deskType]).then(function (deskName) {
+                        $location.path("/desk/" + deskName);
+                    }, function (error) { console.error(error); });
+                };
+            }
+        ]);
 })();
