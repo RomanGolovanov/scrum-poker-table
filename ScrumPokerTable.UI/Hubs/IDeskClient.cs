@@ -1,7 +1,9 @@
-﻿namespace ScrumPokerTable.UI.Hubs
+﻿using ScrumPokerTable.UI.Model;
+
+namespace ScrumPokerTable.UI.Hubs
 {
     public interface IDeskClient
     {
-        void DeskChanged(string userName, string message);
+        void DeskChanged(Desk desk);
     }
 }

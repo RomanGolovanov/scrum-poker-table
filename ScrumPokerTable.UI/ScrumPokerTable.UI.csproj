@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScrumPokerTable.UI</RootNamespace>
     <AssemblyName>ScrumPokerTable.UI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -219,17 +219,20 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\DeskController.cs" />
+    <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="DataAccess\Entities\DeskEntity.cs" />
-    <Compile Include="DataAccess\Entities\DeskState.cs" />
     <Compile Include="DataAccess\Entities\DeskUserEntity.cs" />
-    <Compile Include="DataAccess\IDeskRepository.cs" />
-    <Compile Include="DataAccess\Providers\InMemoryDeskRepository.cs" />
-    <Compile Include="DataAccess\RepositoryException.cs" />
+    <Compile Include="DataAccess\IDeskProvider.cs" />
+    <Compile Include="DataAccess\Providers\InMemoryDeskProvider.cs" />
+    <Compile Include="DataAccess\DeskLogicException.cs" />
     <Compile Include="Hubs\DeskHub.cs" />
     <Compile Include="Hubs\IDeskClient.cs" />
+    <Compile Include="Hubs\IDeskServer.cs" />
     <Compile Include="IoC\UnityContainerFactory.cs" />
     <Compile Include="IoC\SignalrDependencyResolver.cs" />
+    <Compile Include="Model\Desk.cs" />
+    <Compile Include="Model\DeskState.cs" />
+    <Compile Include="Model\DeskUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

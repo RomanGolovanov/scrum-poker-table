@@ -1,4 +1,5 @@
 ﻿using System;
+using ScrumPokerTable.UI.Model;
 
 namespace ScrumPokerTable.UI.DataAccess.Entities
 {

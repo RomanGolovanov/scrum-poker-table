@@ -1,39 +1,86 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using ScrumPokerTable.UI.DataAccess;
+using ScrumPokerTable.UI.Model;
 
 namespace ScrumPokerTable.UI.Hubs
 {
-    public class DeskHub : Hub<IDeskClient>
+    public class DeskHub : Hub<IDeskClient>, IDeskServer
     {
-        public DeskHub(IDeskRepository deskRepository)
+        public DeskHub(IDeskProvider deskProvider)
         {
-            _deskRepository = deskRepository;
+            _deskProvider = deskProvider;
         }
 
-        public void CreateDesk(string deskName)
+        public void CreateDesk(string deskName, string[] cards)
         {
-            _deskRepository.CreateDesk(deskName, Enumerable.Range(1,15).Select(x=>x.ToString()).ToArray());
+            _deskProvider.CreateDesk(deskName, cards);
         }
 
-        public void ConnectDesk(string deskName, string userName)
+        public void DeleteDesk(string deskName)
         {
-            var users = _deskRepository.GetDeskUsers(deskName);
-            if (users.All(x => x.Name != userName))
+            _deskProvider.DeleteDesk(deskName);
+        }
+
+        public async Task JoinAsUser(string deskName, string userName)
+        {
+            EnsureDeskExists(deskName);
+            await Groups.Add(Context.ConnectionId, deskName);
+            _deskProvider.JoinUser(deskName, userName);
+            Clients.Group(deskName).DeskChanged(GetDesk(deskName));
+        }
+
+        public async Task JoinAsMaster(string deskName)
+        {
+            EnsureDeskExists(deskName);
+            await Groups.Add(Context.ConnectionId, deskName);
+            Clients.Group(deskName).DeskChanged(GetDesk(deskName));
+        }
+
+        public async Task Leave(string deskName)
+        {
+            await Groups.Remove(Context.ConnectionId, deskName);
+        }
+
+        public void SetUserCard(string deskName, string userName, string card)
+        {
+            _deskProvider.SetUserCard(deskName, userName, card);
+            Clients.Group(deskName).DeskChanged(GetDesk(deskName));
+        }
+
+        public void SetDeskState(string deskName, DeskState newState)
+        {
+            _deskProvider.SetDeskState(deskName, newState);
+            Clients.Group(deskName).DeskChanged(GetDesk(deskName));
+        }
+
+        #region Private methods
+
+        private void EnsureDeskExists(string deskName)
+        {
+            _deskProvider.GetDesk(deskName);
+        }
+
+        private Desk GetDesk(string deskName)
+        {
+            var desk = _deskProvider.GetDesk(deskName);
+            return new Desk
             {
-                _deskRepository.CreateDeskUser(deskName, userName);
-                Groups.Add(Context.ConnectionId, deskName);
-            }
-            Clients.Group(deskName).DeskChanged(userName, "connected, users: " + string.Join(",", _deskRepository.GetDeskUsers(deskName).Select(x => x.Name)));
+                Name = desk.Name,
+                Cards = desk.Cards,
+                State = desk.State,
+                Timestamp = desk.Timestamp,
+                Users = _deskProvider.GetDeskUsers(deskName).Select(x => new DeskUser
+                {
+                    Name = x.Name,
+                    Card = x.Card
+                }).ToArray()
+            };
         }
 
-        public void UpdateDeskUser(string deskName, string userName, string message)
-        {
-            _deskRepository.SetUserCard(deskName, userName, message);
-            var userStates = _deskRepository.GetDeskUsers(deskName).Select(x => string.Format("{0}:{1}", x.Name, x.Card ?? "null"));
-            Clients.Group(deskName).DeskChanged(userName, string.Join(",", userStates));
-        }
+        #endregion
 
-        private readonly IDeskRepository _deskRepository;
+        private readonly IDeskProvider _deskProvider;
     }
 }

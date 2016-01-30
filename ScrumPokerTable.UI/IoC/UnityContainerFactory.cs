@@ -9,7 +9,7 @@ namespace ScrumPokerTable.UI.IoC
         public static IUnityContainer Create()
         {
             return new UnityContainer()
-                .RegisterType<IDeskRepository, InMemoryDeskRepository>(new ContainerControlledLifetimeManager());
+                .RegisterType<IDeskProvider, InMemoryDeskProvider>(new ContainerControlledLifetimeManager());
         }
     }
 }
