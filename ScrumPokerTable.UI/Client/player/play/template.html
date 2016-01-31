@@ -1,7 +1,7 @@
 <div class="row">
     <desk-view desk="desk" user="userName"/>
 </div>
-<div class="row">
+<div class="row" ng-show="canVote()">
     <div class="col-lg-10 col-lg-offset-1 text-center">
         <h2><span class="text-capitalize">{{userName}}</span>, your choice:</h2>
         <section class="pull-center">

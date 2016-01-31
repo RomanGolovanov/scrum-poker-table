@@ -1,16 +1,12 @@
-﻿using ScrumPokerTable.UI.DataAccess.Entities;
-using ScrumPokerTable.UI.Model;
+﻿using ScrumPokerTable.UI.Model;
 
-namespace ScrumPokerTable.UI.DataAccess.Providers
+namespace ScrumPokerTable.UI.DataAccess
 {
     public interface IDeskProvider
     {
-        DeskEntity GetDesk(string deskName);
-        DeskUserEntity[] GetDeskUsers(string deskName);
-        DeskUserEntity GetDeskUser(string deskName, string userName);
-        
         string CreateDesk(string[] cards);
         void DeleteDesk(string deskName);
+        Desk GetDesk(string deskName);
 
         void JoinUser(string deskName, string userName);
 

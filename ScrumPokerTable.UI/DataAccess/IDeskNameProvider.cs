@@ -1,4 +1,4 @@
-﻿namespace ScrumPokerTable.UI.DataAccess.Providers
+﻿namespace ScrumPokerTable.UI.DataAccess
 {
     public interface IDeskNameProvider
     {

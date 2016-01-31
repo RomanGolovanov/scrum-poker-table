@@ -1,5 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
-using ScrumPokerTable.UI.DataAccess.Providers;
+using ScrumPokerTable.UI.DataAccess;
 
 namespace ScrumPokerTable.UI.IoC
 {

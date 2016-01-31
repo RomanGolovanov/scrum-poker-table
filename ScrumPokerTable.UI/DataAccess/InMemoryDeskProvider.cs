@@ -4,7 +4,7 @@ using System.Linq;
 using ScrumPokerTable.UI.DataAccess.Entities;
 using ScrumPokerTable.UI.Model;
 
-namespace ScrumPokerTable.UI.DataAccess.Providers
+namespace ScrumPokerTable.UI.DataAccess
 {
     public class InMemoryDeskProvider : IDeskProvider
     {
@@ -13,32 +13,6 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
             _deskNameProvider = deskNameProvider;
             _desks = new List<DeskEntity>();
             _users = new List<DeskUserEntity>();
-        }
-
-        public DeskEntity GetDesk(string deskName)
-        {
-            var desk = _desks.SingleOrDefault(x => x.Name == deskName);
-            if (desk == null)
-            {
-                throw new DeskLogicException(string.Format("Desk {0} not found exists", deskName));
-            }
-            return desk;
-        }
-
-        public DeskUserEntity[] GetDeskUsers(string deskName)
-        {
-            GetDesk(deskName);
-            return _users.Where(x => x.DeskName == deskName).ToArray();
-        }
-
-        public DeskUserEntity GetDeskUser(string deskName, string userName)
-        {
-            var user = GetDeskUsers(deskName).SingleOrDefault(x => x.Name == userName);
-            if (user == null)
-            {
-                throw new DeskLogicException(string.Format("Desk {0} does not contains user {1}", deskName, userName));
-            }
-            return user;
         }
 
         public string CreateDesk(string[] cards)
@@ -63,7 +37,7 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
 
         public void DeleteDesk(string deskName)
         {
-            _desks.Remove(GetDesk(deskName));
+            _desks.Remove(GetDeskEntity(deskName));
         }
 
         public void JoinUser(string deskName, string userName)
@@ -80,9 +54,26 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
             });
         }
 
+        public Desk GetDesk(string deskName)
+        {
+            var desk = GetDeskEntity(deskName);
+            return new Desk
+            {
+                Name = desk.Name,
+                Cards = desk.Cards,
+                State = desk.State,
+                Timestamp = desk.Timestamp,
+                Users = GetDeskUsers(deskName).Select(x => new DeskUser
+                {
+                    Name = x.Name,
+                    Card = x.Card
+                }).ToArray()
+            };
+        }
+
         public void SetDeskState(string deskName, DeskState newState)
         {
-            var desk = GetDesk(deskName);
+            var desk = GetDeskEntity(deskName);
             if (desk.State == newState)
             {
                 throw new DeskLogicException(string.Format("Desk {0} already has the state {1}", deskName, newState));
@@ -93,7 +84,7 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
 
         public void SetUserCard(string deskName, string userName, string card)
         {
-            var desk = GetDesk(deskName);
+            var desk = GetDeskEntity(deskName);
             if (!desk.Cards.Contains(card))
             {
                 throw new DeskLogicException(string.Format("Card {0} is not supported by desk {1}", card, deskName));
@@ -108,11 +99,37 @@ namespace ScrumPokerTable.UI.DataAccess.Providers
             user.Card = card;
             if (GetDeskUsers(deskName).All(x=>x.Card!=null) && desk.State == DeskState.Voting)
             {
-                //desk.State = DeskState.Display;
+                desk.State = DeskState.Display;
             }
             desk.Timestamp = DateTime.UtcNow;
 
         }
+
+        public DeskEntity GetDeskEntity(string deskName)
+        {
+            var desk = _desks.SingleOrDefault(x => x.Name == deskName);
+            if (desk == null)
+            {
+                throw new DeskLogicException(string.Format("Desk {0} not found exists", deskName));
+            }
+            return desk;
+        }
+
+        private DeskUserEntity[] GetDeskUsers(string deskName)
+        {
+            return _users.Where(x => x.DeskName == deskName).ToArray();
+        }
+
+        private DeskUserEntity GetDeskUser(string deskName, string userName)
+        {
+            var user = GetDeskUsers(deskName).SingleOrDefault(x => x.Name == userName);
+            if (user == null)
+            {
+                throw new DeskLogicException(string.Format("Desk {0} does not contains user {1}", deskName, userName));
+            }
+            return user;
+        }
+
 
         private readonly IDeskNameProvider _deskNameProvider;
 

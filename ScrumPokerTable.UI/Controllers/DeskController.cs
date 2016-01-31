@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using System.Web.Http;
-using ScrumPokerTable.UI.DataAccess.Providers;
+﻿using System.Web.Http;
+using ScrumPokerTable.UI.DataAccess;
 using ScrumPokerTable.UI.Model;
 
 namespace ScrumPokerTable.UI.Controllers
@@ -14,19 +13,7 @@ namespace ScrumPokerTable.UI.Controllers
 
         public Desk Get(string id)
         {
-            var desk = _deskProvider.GetDesk(id);
-            return new Desk
-            {
-                Name = desk.Name,
-                Cards = desk.Cards,
-                State = desk.State,
-                Timestamp = desk.Timestamp,
-                Users = _deskProvider.GetDeskUsers(id).Select(x => new DeskUser
-                {
-                    Name = x.Name,
-                    Card = x.Card
-                }).ToArray()
-            };
+            return _deskProvider.GetDesk(id);
         }
 
         private readonly IDeskProvider _deskProvider;

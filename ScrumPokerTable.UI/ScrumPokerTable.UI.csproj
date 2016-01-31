@@ -211,8 +211,6 @@
     <Content Include="Scripts\ui-bootstrap-tpls.min.js" />
     <Content Include="Scripts\ui-bootstrap.js" />
     <Content Include="Scripts\ui-bootstrap.min.js" />
-    <Content Include="Temp\app.js" />
-    <Content Include="Temp\index.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -222,10 +220,10 @@
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="DataAccess\Entities\DeskEntity.cs" />
     <Compile Include="DataAccess\Entities\DeskUserEntity.cs" />
-    <Compile Include="DataAccess\Providers\IDeskNameProvider.cs" />
-    <Compile Include="DataAccess\Providers\IDeskProvider.cs" />
-    <Compile Include="DataAccess\Providers\DeskNameProvider.cs" />
-    <Compile Include="DataAccess\Providers\InMemoryDeskProvider.cs" />
+    <Compile Include="DataAccess\IDeskNameProvider.cs" />
+    <Compile Include="DataAccess\IDeskProvider.cs" />
+    <Compile Include="DataAccess\DeskNameProvider.cs" />
+    <Compile Include="DataAccess\InMemoryDeskProvider.cs" />
     <Compile Include="DataAccess\DeskLogicException.cs" />
     <Compile Include="Hubs\DeskHub.cs" />
     <Compile Include="Hubs\IDeskClient.cs" />

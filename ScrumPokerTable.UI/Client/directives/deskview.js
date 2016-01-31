@@ -28,7 +28,7 @@
                                 .reduce(function(a, c) { return c < a ? c : a }, 99);
 
                             scope.users = desk.users;
-                            scope.complete = desk.state = 1;
+                            scope.complete = desk.state === 1;
                             scope.stateName = { 0: "Vote in progress...", 1: "Vote result" }[desk.state];
 
                         }, true);

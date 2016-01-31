@@ -20,6 +20,9 @@
                     return { "background-color": "#8f8" };
                 }
 
+                $scope.canVote = function() {
+                    return $scope.desk != null && $scope.desk.state === 0;
+                }
 
                 deskHubService.getDesk($scope.deskName).then(function (desk) {
                     $scope.desk = desk;
