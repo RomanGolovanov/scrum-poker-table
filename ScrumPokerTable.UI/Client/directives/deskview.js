@@ -18,12 +18,12 @@
 
                             scope.max = desk.users
                                 .map(function(p) { return p.card })
-                                .filter(function(c) { return c != null && c != "?" })
+                                .filter(function(c) { return c != null && c !== "?" })
                                 .map(function(c) { return parseInt(c) })
                                 .reduce(function(a, c) { return c > a ? c : a }, 0);
                             scope.min = desk.users
                                 .map(function(p) { return p.card })
-                                .filter(function(c) { return c != null && c != "?" })
+                                .filter(function(c) { return c != null && c !== "?" })
                                 .map(function(c) { return parseInt(c) })
                                 .reduce(function(a, c) { return c < a ? c : a }, 99);
 

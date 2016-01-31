@@ -9,7 +9,7 @@ namespace ScrumPokerTable.UI.IoC
     {
         public WebApiDependencyResolver(IUnityContainer container)
         {
-            this._container = container;
+            _container = container;
         }
 
         public object GetService(Type serviceType)
