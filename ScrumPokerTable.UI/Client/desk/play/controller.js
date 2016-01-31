@@ -6,7 +6,7 @@
             function($scope, $routeParams, $location, deskHubService) {
 
                 $scope.deskName = $routeParams.desk_id;
-                $scope.deskUrl = $location.absUrl();
+                $scope.deskUrl = $location.absUrl().replace("/desk/","/player/");
                 $scope.desk = null;
 
                 $scope.deleteDesk = function() {
