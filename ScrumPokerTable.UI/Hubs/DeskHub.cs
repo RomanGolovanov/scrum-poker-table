@@ -12,16 +12,6 @@ namespace ScrumPokerTable.UI.Hubs
             _deskProvider = deskProvider;
         }
 
-        public string CreateDesk(string[] cards)
-        {
-            return _deskProvider.CreateDesk(cards);
-        }
-
-        public void DeleteDesk(string deskName)
-        {
-            _deskProvider.DeleteDesk(deskName);
-        }
-
         public async Task JoinAsUser(string deskName, string userName)
         {
             EnsureDeskExists(deskName);
@@ -42,11 +32,6 @@ namespace ScrumPokerTable.UI.Hubs
             EnsureDeskExists(deskName);
             await Groups.Remove(Context.ConnectionId, deskName);
             Clients.Group(deskName).DeskChanged(_deskProvider.GetDesk(deskName));
-        }
-
-        public Desk GetDesk(string deskName)
-        {
-            return _deskProvider.GetDesk(deskName);
         }
 
         public void SetUserCard(string deskName, string userName, string card)

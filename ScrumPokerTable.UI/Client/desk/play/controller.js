@@ -1,5 +1,5 @@
 (function() {
-    angular
+    window.angular
         .module("ScrumPokerTable")
         .controller("PlayDeskController", [
             "$scope", "$routeParams", "$location", "DeskHubService",
@@ -28,6 +28,11 @@
 
                 deskHubService.getDesk($scope.deskName).then(function (desk) {
                     $scope.desk = desk;
+                }, function (error) {
+                    console.error(error);
+                    if (error.status === 404) {
+                        $location.path("/desk");
+                    }
                 });
 
                 $scope.$on("deskChanged", function(event, desk) {
@@ -37,6 +42,16 @@
                 $scope.$on("deskHubConnected", function() {
                     deskHubService.joinAsMaster($scope.deskName);
                 });
+
+                $scope.$on("$destroy", function() {
+                    if (deskHubService.hasConnection()) {
+                        deskHubService.leave($scope.deskName);
+                    }
+                });
+
+                if (deskHubService.hasConnection()) {
+                    deskHubService.joinAsMaster($scope.deskName);
+                }
             }
         ]);
 })();

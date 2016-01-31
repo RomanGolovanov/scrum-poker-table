@@ -1,5 +1,5 @@
 (function() {
-    angular
+    window.angular
         .module("ScrumPokerTable")
         .controller("ConnectPlayerController", [
             "$scope", "$routeParams", "$location", "DeskHubService", function($scope, $routeParams, $location, deskHubService) {

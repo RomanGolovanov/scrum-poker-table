@@ -1,5 +1,5 @@
 (function() {
-    angular
+    window.angular
         .module("ScrumPokerTable")
         .controller("NewDeskController", [
             "$scope", "$location", "DeskHubService", function($scope, $location, deskHubService) {
@@ -13,15 +13,19 @@
                 };
 
                 $scope.connect = function(deskName) {
-                    deskHubService.joinAsMaster(deskName).then(function () {
+                    deskHubService.get(deskName).then(function () {
                         $location.path("/desk/" + deskName);
-                    }, function (error) { console.error(error); });
+                    }, function(error) {
+                         console.error(error);
+                    });
                 };
 
                 $scope.create = function() {
                     deskHubService.createDesk($scope.deskTypes[$scope.state.deskType]).then(function (deskName) {
                         $location.path("/desk/" + deskName);
-                    }, function (error) { console.error(error); });
+                    }, function(error) {
+                         console.error(error);
+                    });
                 };
             }
         ]);

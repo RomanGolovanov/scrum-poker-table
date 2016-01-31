@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ScrumPokerTable.UI.DataAccess.Entities;
+using ScrumPokerTable.UI.DataAccess.Exceptions;
 using ScrumPokerTable.UI.Model;
 
 namespace ScrumPokerTable.UI.DataAccess
@@ -14,6 +15,8 @@ namespace ScrumPokerTable.UI.DataAccess
             _desks = new List<DeskEntity>();
             _users = new List<DeskUserEntity>();
         }
+
+        #region Desk Management
 
         public string CreateDesk(string[] cards)
         {
@@ -40,20 +43,6 @@ namespace ScrumPokerTable.UI.DataAccess
             _desks.Remove(GetDeskEntity(deskName));
         }
 
-        public void JoinUser(string deskName, string userName)
-        {
-            if (_users.Any(x => x.DeskName == deskName && x.Name == userName))
-            {
-                return;
-            }
-            _users.Add(new DeskUserEntity
-            {
-                DeskName = deskName,
-                Name = userName,
-                Card = null
-            });
-        }
-
         public Desk GetDesk(string deskName)
         {
             var desk = GetDeskEntity(deskName);
@@ -78,8 +67,33 @@ namespace ScrumPokerTable.UI.DataAccess
             {
                 throw new DeskLogicException(string.Format("Desk {0} already has the state {1}", deskName, newState));
             }
+            if (newState == DeskState.Voting)
+            {
+                foreach (var user in GetDeskUsers(deskName))
+                {
+                    user.Card = null;
+                }
+            }
             desk.State = newState;
             desk.Timestamp = DateTime.UtcNow;
+        }
+
+        #endregion
+
+        #region User Management
+
+        public void JoinUser(string deskName, string userName)
+        {
+            if (_users.Any(x => x.DeskName == deskName && x.Name == userName))
+            {
+                return;
+            }
+            _users.Add(new DeskUserEntity
+            {
+                DeskName = deskName,
+                Name = userName,
+                Card = null
+            });
         }
 
         public void SetUserCard(string deskName, string userName, string card)
@@ -102,15 +116,18 @@ namespace ScrumPokerTable.UI.DataAccess
                 desk.State = DeskState.Display;
             }
             desk.Timestamp = DateTime.UtcNow;
-
         }
 
-        public DeskEntity GetDeskEntity(string deskName)
+        #endregion
+
+        #region Private Methods
+
+        private DeskEntity GetDeskEntity(string deskName)
         {
             var desk = _desks.SingleOrDefault(x => x.Name == deskName);
             if (desk == null)
             {
-                throw new DeskLogicException(string.Format("Desk {0} not found exists", deskName));
+                throw new DeskNotFoundException(string.Format("Desk {0} not found exists", deskName));
             }
             return desk;
         }
@@ -125,11 +142,12 @@ namespace ScrumPokerTable.UI.DataAccess
             var user = GetDeskUsers(deskName).SingleOrDefault(x => x.Name == userName);
             if (user == null)
             {
-                throw new DeskLogicException(string.Format("Desk {0} does not contains user {1}", deskName, userName));
+                throw new DeskUserNotFoundException(string.Format("Desk {0} does not contains user {1}", deskName, userName));
             }
             return user;
         }
 
+        #endregion
 
         private readonly IDeskNameProvider _deskNameProvider;
 

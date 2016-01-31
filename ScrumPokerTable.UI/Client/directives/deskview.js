@@ -1,5 +1,5 @@
 (function() {
-    angular
+    window.angular
         .module("ScrumPokerTable")
         .directive("deskView", [
             function() {
@@ -10,9 +10,9 @@
                         user: "="
                     },
                     templateUrl: "Client/directives/deskview.html",
-                    link: function link(scope, element, attr) {
+                    link: function link(scope) {
 
-                        scope.$watch("desk", function(desk, oldDesk) {
+                        scope.$watch("desk", function(desk) {
 
                             if (!desk) return;
 
@@ -48,6 +48,8 @@
                             if (parseInt(user.card) === scope.max) {
                                 return { "background-color": "#f88" };
                             }
+
+                            return "";
                         }
 
                     }

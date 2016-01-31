@@ -1,9 +1,9 @@
 (function() {
-    angular
+    window.angular
         .module("ScrumPokerTable")
         .controller("PlayerController", [
-            "$scope", "$routeParams", "DeskHubService",
-            function($scope, $routeParams, deskHubService) {
+            "$scope", "$routeParams", "$location", "DeskHubService",
+            function($scope, $routeParams, $location, deskHubService) {
 
                 $scope.deskName = $routeParams.desk_id;
                 $scope.userName = $routeParams.player_id;
@@ -30,6 +30,11 @@
                         return (u.name || "").toLowerCase() === $scope.userName.toLowerCase();
                     })[0];
                     $scope.selectedCard = user.card;
+                }, function (error) {
+                    console.error(error);
+                    if (error.status === 404) {
+                        $location.path("/player");
+                    }
                 });
 
                 $scope.$on("deskChanged", function (event, desk) {
@@ -44,6 +49,15 @@
                     deskHubService.joinAsUser($scope.deskName, $scope.userName);
                 });
 
+                $scope.$on("$destroy", function () {
+                    if (deskHubService.hasConnection()) {
+                        deskHubService.leave($scope.deskName);
+                    }
+                });
+
+                if (deskHubService.hasConnection()) {
+                    deskHubService.joinAsUser($scope.deskName, $scope.userName);
+                }
             }
         ]);
 })();

@@ -4,11 +4,9 @@
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1 text-center">
         <section>
-            <button class="btn btn-primary" ng-click="startGame()" ng-show="desk.state === 3">Drop cards</button>
-            <button class="btn btn-primary" ng-click="finishGame()" ng-show="desk.state === 2">Open cards</button>
-            <button class="btn btn-primary" ng-show="desk.state === 3" clipboard text="desk_report"
-                    on-copied="copySuccess()" on-error="copyFail(err)">Copy to Clipboard
-            </button>
+            <button class="btn btn-primary" ng-click="beginVote()" ng-show="desk.state === 1">Drop cards</button>
+            <button class="btn btn-primary" ng-click="endVote()" ng-show="desk.state === 0">Open cards</button>
+            <button class="btn btn-primary" ng-show="desk.state === 1" clipboard text="deskReport" on-copied="copySuccess()" on-error="copyFail(err)">Copy to Clipboard</button>
         </section>
     </div>
 </div>

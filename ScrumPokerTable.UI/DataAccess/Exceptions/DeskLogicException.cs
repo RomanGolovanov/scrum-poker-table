@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScrumPokerTable.UI.DataAccess
+namespace ScrumPokerTable.UI.DataAccess.Exceptions
 {
     public class DeskLogicException : Exception
     {

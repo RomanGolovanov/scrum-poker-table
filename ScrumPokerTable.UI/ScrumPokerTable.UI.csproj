@@ -220,11 +220,13 @@
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="DataAccess\Entities\DeskEntity.cs" />
     <Compile Include="DataAccess\Entities\DeskUserEntity.cs" />
+    <Compile Include="DataAccess\Exceptions\DeskNotFoundException.cs" />
+    <Compile Include="DataAccess\Exceptions\DeskUserNotFoundException.cs" />
     <Compile Include="DataAccess\IDeskNameProvider.cs" />
     <Compile Include="DataAccess\IDeskProvider.cs" />
     <Compile Include="DataAccess\DeskNameProvider.cs" />
     <Compile Include="DataAccess\InMemoryDeskProvider.cs" />
-    <Compile Include="DataAccess\DeskLogicException.cs" />
+    <Compile Include="DataAccess\Exceptions\DeskLogicException.cs" />
     <Compile Include="Hubs\DeskHub.cs" />
     <Compile Include="Hubs\IDeskClient.cs" />
     <Compile Include="Hubs\IDeskServer.cs" />
