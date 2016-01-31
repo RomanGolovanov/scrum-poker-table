@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ScrumPokerTable.UI.DataAccess
+namespace ScrumPokerTable.UI.Providers.Naming
 {
     public class DeskNameProvider : IDeskNameProvider
     {

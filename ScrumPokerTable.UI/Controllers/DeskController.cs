@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Web.Http;
-using ScrumPokerTable.UI.DataAccess;
-using ScrumPokerTable.UI.DataAccess.Exceptions;
 using ScrumPokerTable.UI.Model;
+using ScrumPokerTable.UI.Providers;
+using ScrumPokerTable.UI.Providers.Exceptions;
 
 namespace ScrumPokerTable.UI.Controllers
 {

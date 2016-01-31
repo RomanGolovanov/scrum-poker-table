@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
-using ScrumPokerTable.UI.DataAccess;
 using ScrumPokerTable.UI.Model;
+using ScrumPokerTable.UI.Providers;
 
 namespace ScrumPokerTable.UI.Hubs
 {

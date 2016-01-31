@@ -1,8 +1,7 @@
-﻿namespace ScrumPokerTable.UI.DataAccess.Entities
+﻿namespace ScrumPokerTable.UI.Providers.Storage.Entities
 {
     public class DeskUserEntity
     {
-        public string DeskName { get; set; }
         public string Name { get; set; }
         public string Card { get; set; }
     }

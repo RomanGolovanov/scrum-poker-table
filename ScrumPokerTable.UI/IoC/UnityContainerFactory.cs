@@ -1,5 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
-using ScrumPokerTable.UI.DataAccess;
+using ScrumPokerTable.UI.Providers;
+using ScrumPokerTable.UI.Providers.Naming;
+using ScrumPokerTable.UI.Providers.Storage;
 
 namespace ScrumPokerTable.UI.IoC
 {
@@ -8,8 +10,9 @@ namespace ScrumPokerTable.UI.IoC
         public static IUnityContainer Create()
         {
             return new UnityContainer()
+                .RegisterType<IDeskStorage, MemoryDeskStorage>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeskNameProvider, DeskNameProvider>()
-                .RegisterType<IDeskProvider, InMemoryDeskProvider>(new ContainerControlledLifetimeManager());
+                .RegisterType<IDeskProvider, DeskProvider>();
         }
     }
 }

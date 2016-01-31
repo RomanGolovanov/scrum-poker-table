@@ -218,15 +218,18 @@
   <ItemGroup>
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
-    <Compile Include="DataAccess\Entities\DeskEntity.cs" />
-    <Compile Include="DataAccess\Entities\DeskUserEntity.cs" />
-    <Compile Include="DataAccess\Exceptions\DeskNotFoundException.cs" />
-    <Compile Include="DataAccess\Exceptions\DeskUserNotFoundException.cs" />
-    <Compile Include="DataAccess\IDeskNameProvider.cs" />
-    <Compile Include="DataAccess\IDeskProvider.cs" />
-    <Compile Include="DataAccess\DeskNameProvider.cs" />
-    <Compile Include="DataAccess\InMemoryDeskProvider.cs" />
-    <Compile Include="DataAccess\Exceptions\DeskLogicException.cs" />
+    <Compile Include="Providers\Naming\IDeskNameProvider.cs" />
+    <Compile Include="Providers\IDeskProvider.cs" />
+    <Compile Include="Providers\Naming\DeskNameProvider.cs" />
+    <Compile Include="Providers\DeskProvider.cs" />
+    <Compile Include="Providers\Exceptions\DeskLogicException.cs" />
+    <Compile Include="Providers\Storage\DeskStorageExtensions.cs" />
+    <Compile Include="Providers\Storage\Entities\DeskEntity.cs" />
+    <Compile Include="Providers\Storage\Entities\DeskUserEntity.cs" />
+    <Compile Include="Providers\Exceptions\DeskNotFoundException.cs" />
+    <Compile Include="Providers\Exceptions\DeskUserNotFoundException.cs" />
+    <Compile Include="Providers\Storage\IDeskStorage.cs" />
+    <Compile Include="Providers\Storage\MemoryDeskStorage.cs" />
     <Compile Include="Hubs\DeskHub.cs" />
     <Compile Include="Hubs\IDeskClient.cs" />
     <Compile Include="Hubs\IDeskServer.cs" />
