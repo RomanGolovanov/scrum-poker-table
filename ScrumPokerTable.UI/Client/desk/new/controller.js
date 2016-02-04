@@ -13,7 +13,7 @@
                 };
 
                 $scope.connect = function(deskName) {
-                    deskHubService.get(deskName).then(function () {
+                    deskHubService.getDesk(deskName).then(function () {
                         $location.path("/desk/" + deskName);
                     }, function(error) {
                          console.error(error);
