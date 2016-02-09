@@ -8,7 +8,7 @@
                 $scope.deskName = $routeParams.desk_id;
                 $scope.userName = $routeParams.player_id;
                 $scope.selectedCard = null;
-
+                
                 $scope.setUserCard = function (card) {
                     deskHubService.setUserCard($scope.deskName, $scope.userName, card);
                 }
@@ -47,6 +47,12 @@
 
                 $scope.$on("deskHubConnected", function() {
                     deskHubService.joinAsUser($scope.deskName, $scope.userName);
+                });
+
+                $scope.$on("deskHubConnectionState", function (event, data) {
+                    if (data === "disconnected") {
+                        deskHubService.reconnect();
+                    };
                 });
 
                 $scope.$on("$destroy", function () {

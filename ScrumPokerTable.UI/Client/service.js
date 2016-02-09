@@ -2,7 +2,7 @@
     window.angular
         .module("ScrumPokerTable")
         .factory("DeskHubService", [
-            "$rootScope", "$q", "$http", "Hub", function($rootScope, $q, $http, Hub) {
+            "$rootScope", "$q", "$http", "$timeout", "Hub", function($rootScope, $q, $http, $timeout, Hub) {
 
                 var connected = false;
                 var deskHub = new Hub("deskHub", {
@@ -22,28 +22,33 @@
                         "setDeskState"
                     ],
 
-                    //transport: ["longPolling"],
+                    transport: ["longPolling"],
                     queryParams: { "api": "1.0" },
                     errorHandler: function(error) {
-                         console.error(error);
+                        console.error(error);
+                        $rootScope.$broadcast("deskHubConnectionState", "error");
+                        $rootScope.$apply();
                     },
 
                     stateChanged: function(state) {
-                        console.log(state);
                         connected = false;
+                        console.info(state);
                         switch (state.newState) {
                             case $.signalR.connectionState.connecting:
-                                $rootScope.$broadcast("deskHubConnecting");
+                                $rootScope.$broadcast("deskHubConnectionState", "connecting");
                                 break;
                             case $.signalR.connectionState.connected:
                                 connected = true;
-                                $rootScope.$broadcast("deskHubConnected");
+                                $rootScope.$broadcast("deskHubConnectionState", "connected");
+                                $rootScope.$apply();
                                 break;
                             case $.signalR.connectionState.reconnecting:
-                                $rootScope.$broadcast("deskHubReconnecting");
+                                $rootScope.$broadcast("deskHubConnectionState", "reconnecting");
+                                $rootScope.$apply();
                                 break;
                             case $.signalR.connectionState.disconnected:
-                                $rootScope.$broadcast("deskHubDisconnected");
+                                $rootScope.$broadcast("deskHubConnectionState", "disconnected");
+                                $rootScope.$apply();
                                 break;
                         }
                     }
@@ -95,6 +100,13 @@
 
                     hasConnection: function () {
                         return connected;
+                    },
+
+                    reconnect: function() {
+                        $timeout(function () {
+                            deskHub.connect();
+                        }, 2000);
+                        
                     }
 
                 };
