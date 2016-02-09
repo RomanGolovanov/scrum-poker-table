@@ -49,8 +49,8 @@
                     deskHubService.joinAsUser($scope.deskName, $scope.userName);
                 });
 
-                $scope.$on("deskHubConnectionState", function (event, data) {
-                    if (data === "disconnected") {
+                $scope.$on("deskHubConnectionState", function (event, state) {
+                    if (state === "disconnected" || state === "error") {
                         deskHubService.reconnect();
                     };
                 });
