@@ -22,7 +22,7 @@
                         "setDeskState"
                     ],
 
-                    transport: ["longPolling"],
+                    //transport: ["longPolling"],
                     queryParams: { "api": "1.0" },
                     errorHandler: function(error) {
                         console.error(error);
