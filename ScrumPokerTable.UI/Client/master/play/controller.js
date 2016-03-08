@@ -32,6 +32,11 @@
 
                 $scope.deskName = $routeParams.desk_id;
                 $scope.deskReport = "";
+                $scope.connected = deskHubService.hasConnection();
+
+                $scope.showConnectionAlert = function () {
+                    return !$scope.connected;
+                }
 
                 $scope.beginVote = function () {
                     deskHubService.setDeskState($scope.deskName, 0);
@@ -66,8 +71,11 @@
                     $scope.deskReport = createDeskReport(desk);
                 });
 
-                $scope.$on("deskHubConnected", function () {
-                    deskHubService.joinAsMaster($scope.deskName, $scope.userName);
+                $scope.$on("deskHubConnectionState", function () {
+                    $scope.connected = deskHubService.hasConnection();
+                    if ($scope.connected) {
+                        deskHubService.joinAsMaster($scope.deskName, $scope.userName);
+                    }
                 });
 
                 $scope.$on("$destroy", function () {
@@ -76,8 +84,11 @@
                     }
                 });
 
-                if (deskHubService.hasConnection()) {
+                if ($scope.connected) {
+                    console.log("Register as player");
                     deskHubService.joinAsMaster($scope.deskName);
+                } else {
+                    console.log("Desk not connected, wait....");
                 }
             }
         ]);

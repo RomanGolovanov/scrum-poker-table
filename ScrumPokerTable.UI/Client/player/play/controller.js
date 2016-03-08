@@ -8,6 +8,7 @@
                 $scope.deskName = $routeParams.desk_id;
                 $scope.userName = $routeParams.player_id;
                 $scope.selectedCard = null;
+                $scope.connected = deskHubService.hasConnection();
                 
                 $scope.setUserCard = function (card) {
                     deskHubService.setUserCard($scope.deskName, $scope.userName, card);
@@ -20,8 +21,16 @@
                     return { "background-color": "#8f8" };
                 }
 
-                $scope.canVote = function() {
-                    return $scope.desk != null && $scope.desk.state === 0;
+                $scope.showConnectionAlert = function() {
+                    return !$scope.connected;
+                }
+
+                $scope.showResults = function() {
+                    return $scope.desk != null && $scope.desk.state !== 0;
+                }
+
+                $scope.showVoteSelection = function() {
+                    return $scope.connected && ($scope.desk != null && $scope.desk.state === 0);
                 }
 
                 deskHubService.getDesk($scope.deskName).then(function (desk) {
@@ -45,14 +54,11 @@
                     $scope.selectedCard = user.card;
                 });
 
-                $scope.$on("deskHubConnected", function() {
-                    deskHubService.joinAsUser($scope.deskName, $scope.userName);
-                });
-
                 $scope.$on("deskHubConnectionState", function (event, state) {
-                    if (state === "disconnected" || state === "error") {
-                        deskHubService.reconnect();
-                    };
+                    $scope.connected = deskHubService.hasConnection();
+                    if ($scope.connected) {
+                        deskHubService.joinAsUser($scope.deskName, $scope.userName);
+                    }
                 });
 
                 $scope.$on("$destroy", function () {
@@ -61,8 +67,11 @@
                     }
                 });
 
-                if (deskHubService.hasConnection()) {
+                if ($scope.connected) {
+                    console.log("Register as player");
                     deskHubService.joinAsUser($scope.deskName, $scope.userName);
+                } else {
+                    console.log("Desk not connected, wait....");
                 }
             }
         ]);

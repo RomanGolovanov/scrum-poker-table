@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Practices.Unity;
 using Owin;
@@ -29,6 +30,10 @@ namespace ScrumPokerTable.UI
 
         private static void ConfigureSignalR(IAppBuilder app, IUnityContainer container)
         {
+            GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(2);
+            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromSeconds(6);
+            GlobalHost.Configuration.KeepAlive = TimeSpan.FromSeconds(2);
+
             var hubConfiguration = new HubConfiguration
             {
                 Resolver = new SignalrDependencyResolver(container)

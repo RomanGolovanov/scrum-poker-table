@@ -1,7 +1,15 @@
-<div class="row" ng-show="!canVote()">
+<div class="row" ng-show="showConnectionAlert()">
+    <div class="col-lg-6 col-lg-offset-3 text-center">
+        <h2>Connecting....</h2>
+        <div class="progress progress-striped active">
+            <div class="progress-bar" style="width: 100%"></div>
+        </div>
+    </div>
+</div>
+<div class="row" ng-show="showResults()">
     <desk-view desk="desk" user="userName"/>
 </div>
-<div class="row" ng-show="canVote()">
+<div class="row" ng-show="showVoteSelection()">
     <div class="col-lg-10 col-lg-offset-1 text-center">
         <h2><span class="text-capitalize">{{userName}}</span>, your choice:</h2>
         <section class="pull-center">

@@ -5,12 +5,17 @@
             "$rootScope", "$q", "$http", "$timeout", "Hub", function($rootScope, $q, $http, $timeout, Hub) {
 
                 var connected = false;
+
+                $.connection.hub.transportConnectTimeout = 1000;
+
+
+
                 var deskHub = new Hub("deskHub", {
                     listeners: {
                         "deskChanged": function (desk) {
-                            console.log(desk);
-                            $rootScope.$broadcast("deskChanged", desk);
-                            $rootScope.$apply();
+                            $rootScope.$applyAsync(function () {
+                                $rootScope.$broadcast("deskChanged", desk);
+                            });
                         }
                     },
 
@@ -22,37 +27,59 @@
                         "setDeskState"
                     ],
 
-                    //transport: ["longPolling"],
+                    transport: ["longPolling"],
                     queryParams: { "api": "1.0" },
                     errorHandler: function(error) {
-                        console.error(error);
-                        $rootScope.$broadcast("deskHubConnectionState", "error");
-                        $rootScope.$apply();
+                        $rootScope.$applyAsync(function() {
+                            console.error(error);
+                            connected = false;
+                            $rootScope.$broadcast("deskHubConnectionState", "error");
+                        });
                     },
 
                     stateChanged: function(state) {
-                        connected = false;
-                        console.info(state);
                         switch (state.newState) {
                             case $.signalR.connectionState.connecting:
-                                $rootScope.$broadcast("deskHubConnectionState", "connecting");
+                                $rootScope.$applyAsync(function () {
+                                    console.log("Connecting");
+                                    connected = false;
+                                    $rootScope.$broadcast("deskHubConnectionState", "connecting");
+                                });
                                 break;
                             case $.signalR.connectionState.connected:
-                                connected = true;
-                                $rootScope.$broadcast("deskHubConnectionState", "connected");
-                                $rootScope.$apply();
+                                $rootScope.$applyAsync(function() {
+                                    console.log("Connected");
+                                    connected = true;
+                                    $rootScope.$broadcast("deskHubConnectionState", "connected");
+                                });
                                 break;
                             case $.signalR.connectionState.reconnecting:
-                                $rootScope.$broadcast("deskHubConnectionState", "reconnecting");
-                                $rootScope.$apply();
+                                $rootScope.$applyAsync(function() {
+                                    console.log("Reconnecting");
+                                    connected = false;
+                                    $rootScope.$broadcast("deskHubConnectionState", "reconnecting");
+                                });
                                 break;
                             case $.signalR.connectionState.disconnected:
-                                $rootScope.$broadcast("deskHubConnectionState", "disconnected");
-                                $rootScope.$apply();
+                                $rootScope.$applyAsync(function() {
+                                    console.log("Disconnected");
+                                    connected = false;
+                                    $rootScope.$broadcast("deskHubConnectionState", "disconnected");
+                                    scheduleReconnect();
+                                });
                                 break;
                         }
                     }
                 });
+
+                function scheduleReconnect() {
+                    console.log("Reconnect scheduled...");
+                    $timeout(function () {
+                        console.log("Call deskHub.connect()");
+                        deskHub.connect();
+                    }, 500);
+
+                }
 
                 return {
 
@@ -100,15 +127,7 @@
 
                     hasConnection: function () {
                         return connected;
-                    },
-
-                    reconnect: function() {
-                        $timeout(function () {
-                            deskHub.connect();
-                        }, 2000);
-                        
                     }
-
                 };
             }
         ]);
