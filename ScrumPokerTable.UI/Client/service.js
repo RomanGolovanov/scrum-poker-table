@@ -13,7 +13,7 @@
 
                     this.deskName = deskName;
                     this.handler = handler;
-                    this.pollingTimeout = 15000;
+                    this.pollingTimeout = 30000;
                     this.normalDelay = 10;
                     this.errorDelay = 1000;
 
@@ -31,7 +31,7 @@
                         var config = { headers: {} };
 
                         if (self.desk) {
-                            config.timeout = self.pollingTimeout * 1200;
+                            config.timeout = self.pollingTimeout * 2;
                             config.headers["X-Polling-Timeout"] = self.pollingTimeout;
                             config.headers["X-Timestamp"] = self.desk.timestamp;
                         };
