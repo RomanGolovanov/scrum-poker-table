@@ -44,14 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -191,8 +183,6 @@
     <Content Include="Scripts\angular-qrcode.js" />
     <Content Include="Scripts\angular-route.js" />
     <Content Include="Scripts\angular-route.min.js" />
-    <Content Include="Scripts\angular-signalr-hub.js" />
-    <Content Include="Scripts\angular-signalr-hub.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -200,8 +190,6 @@
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
-    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\polyfills\find.js" />
     <Content Include="Scripts\polyfills\startswith.js" />
     <Content Include="Scripts\polyfills\strings.js" />
@@ -217,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\DeskController.cs" />
+    <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="Providers\Naming\IDeskNameProvider.cs" />
     <Compile Include="Providers\IDeskProvider.cs" />
@@ -230,12 +220,8 @@
     <Compile Include="Providers\Exceptions\DeskUserNotFoundException.cs" />
     <Compile Include="Providers\Storage\IDeskStorage.cs" />
     <Compile Include="Providers\Storage\MemoryDeskStorage.cs" />
-    <Compile Include="Hubs\DeskHub.cs" />
-    <Compile Include="Hubs\IDeskClient.cs" />
-    <Compile Include="Hubs\IDeskServer.cs" />
     <Compile Include="IoC\WebApiDependencyResolver.cs" />
     <Compile Include="IoC\UnityContainerFactory.cs" />
-    <Compile Include="IoC\SignalrDependencyResolver.cs" />
     <Compile Include="Model\Desk.cs" />
     <Compile Include="Model\DeskState.cs" />
     <Compile Include="Model\DeskUser.cs" />

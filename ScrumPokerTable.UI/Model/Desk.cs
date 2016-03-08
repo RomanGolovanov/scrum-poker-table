@@ -15,7 +15,7 @@ namespace ScrumPokerTable.UI.Model
         public DeskState State { get; set; }
 
         [JsonProperty("timestamp")]
-        public DateTime Timestamp { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
 
         [JsonProperty("users")]
         public DeskUser[] Users { get; set; }

@@ -26,8 +26,13 @@
                     $location.path("/desk/history/" + $scope.deskName);
                 }
 
-                deskHubService.getDesk($scope.deskName).then(function (desk) {
+                function onDeskChanged(desk) {
                     $scope.desk = desk;
+                }
+
+                deskHubService.getDesk($scope.deskName).then(function (desk) {
+                    onDeskChanged(desk);
+                    $scope.$on("$destroy", deskHubService.runDeskChangePolling($scope.deskName, onDeskChanged));
                 }, function (error) {
                     console.error(error);
                     if (error.status === 404) {
@@ -35,23 +40,7 @@
                     }
                 });
 
-                $scope.$on("deskChanged", function(event, desk) {
-                    $scope.desk = desk;
-                });
 
-                $scope.$on("deskHubConnected", function() {
-                    deskHubService.joinAsMaster($scope.deskName);
-                });
-
-                $scope.$on("$destroy", function() {
-                    if (deskHubService.hasConnection()) {
-                        deskHubService.leave($scope.deskName);
-                    }
-                });
-
-                if (deskHubService.hasConnection()) {
-                    deskHubService.joinAsMaster($scope.deskName);
-                }
             }
         ]);
 })();

@@ -32,11 +32,6 @@
 
                 $scope.deskName = $routeParams.desk_id;
                 $scope.deskReport = "";
-                $scope.connected = deskHubService.hasConnection();
-
-                $scope.showConnectionAlert = function () {
-                    return !$scope.connected;
-                }
 
                 $scope.beginVote = function () {
                     deskHubService.setDeskState($scope.deskName, 0);
@@ -56,40 +51,21 @@
                     alert("Copy to clipboard: \n" + $scope.deskReport);
                 }
 
-                deskHubService.getDesk($scope.deskName).then(function (desk) {
+                function onDeskChanged(desk) {
                     $scope.desk = desk;
                     $scope.deskReport = createDeskReport(desk);
-                }, function(error) {
+                }
+
+                deskHubService.getDesk($scope.deskName).then(function (desk) {
+                    onDeskChanged(desk);
+                    $scope.$on("$destroy", deskHubService.runDeskChangePolling($scope.deskName, onDeskChanged));
+                }, function (error) {
                     console.error(error);
                     if (error.status === 404) {
                         $location.path("/master");
                     }
                 });
 
-                $scope.$on("deskChanged", function (event, desk) {
-                    $scope.desk = desk;
-                    $scope.deskReport = createDeskReport(desk);
-                });
-
-                $scope.$on("deskHubConnectionState", function () {
-                    $scope.connected = deskHubService.hasConnection();
-                    if ($scope.connected) {
-                        deskHubService.joinAsMaster($scope.deskName, $scope.userName);
-                    }
-                });
-
-                $scope.$on("$destroy", function () {
-                    if (deskHubService.hasConnection()) {
-                        deskHubService.leave($scope.deskName);
-                    }
-                });
-
-                if ($scope.connected) {
-                    console.log("Register as player");
-                    deskHubService.joinAsMaster($scope.deskName);
-                } else {
-                    console.log("Desk not connected, wait....");
-                }
             }
         ]);
 })();

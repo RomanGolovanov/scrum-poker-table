@@ -13,13 +13,13 @@
     window.angular
         .module("ScrumPokerTable")
         .controller("PlayDeskHistoryController", [
-            "$scope", "$routeParams", "$location", "$timeout", "DeskService",
-            function($scope, $routeParams, $location, $timeout, deskService) {
+            "$scope", "$routeParams", "$location", "$timeout", "DeskHubService",
+            function($scope, $routeParams, $location, $timeout, deskHubService) {
 
                 $scope.desk_id = $routeParams.desk_id;
                 $scope.desk_url = $location.absUrl();
 
-                deskService.get_history($scope.desk_id).then(function(deskHistory) {
+                deskHubService.getHistory($scope.desk_id).then(function(deskHistory) {
                     $scope.desk_history = deskHistory.map(function(h) {
                         h.modified = new Date(Math.round(h.modified * 1000)).toLocaleString();
 

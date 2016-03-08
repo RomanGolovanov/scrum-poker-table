@@ -1,92 +1,74 @@
 (function () {
+
+
     window.angular
         .module("ScrumPokerTable")
         .factory("DeskHubService", [
-            "$rootScope", "$q", "$http", "$timeout", "Hub", function($rootScope, $q, $http, $timeout, Hub) {
+            "$rootScope", "$q", "$http", "$timeout", function ($rootScope, $q, $http, $timeout) {
+                "use strict";
+                
+                function PollingWorker(deskName, handler) {
 
-                var connected = false;
+                    var self = this;
 
-                $.connection.hub.transportConnectTimeout = 1000;
+                    this.deskName = deskName;
+                    this.handler = handler;
+                    this.pollingTimeout = 15000;
+                    this.normalDelay = 10;
+                    this.errorDelay = 1000;
 
+                    this.desk = null;
+                    this.timer = null;
+                    this.canceled = false;
 
-
-                var deskHub = new Hub("deskHub", {
-                    listeners: {
-                        "deskChanged": function (desk) {
-                            $rootScope.$applyAsync(function () {
-                                $rootScope.$broadcast("deskChanged", desk);
-                            });
+                    function runDeskChangePolling() {
+                        if (self.canceled) {
+                            return;
                         }
-                    },
 
-                    methods: [
-                        "joinAsUser",
-                        "joinAsMaster",
-                        "leave",
-                        "setUserCard",
-                        "setDeskState"
-                    ],
+                        self.timer = null;
 
-                    transport: ["longPolling"],
-                    queryParams: { "api": "1.0" },
-                    errorHandler: function(error) {
-                        $rootScope.$applyAsync(function() {
-                            console.error(error);
-                            connected = false;
-                            $rootScope.$broadcast("deskHubConnectionState", "error");
+                        var config = { headers: {} };
+
+                        if (self.desk) {
+                            config.timeout = self.pollingTimeout * 1200;
+                            config.headers["X-Polling-Timeout"] = self.pollingTimeout;
+                            config.headers["X-Timestamp"] = self.desk.timestamp;
+                        };
+
+                        $http.get("api/1.0/desk/" + self.deskName + "?rnd" + (new Date().getTime()), config).then(function (response) {
+                            if (self.canceled) {
+                                return;
+                            }
+                            self.desk = response.data;
+                            if (self.canceled) {
+                                return;
+                            }
+                            console.log('Desk changed', self.desk);
+                            self.handler(self.desk);
+                            self.timer = $timeout(runDeskChangePolling, self.normalDelay);
+                        }, function (response) {
+                            if (self.canceled || response.status === 404) {
+                                return;
+                            }
+                            self.timer = $timeout(runDeskChangePolling, (response.status === 304 ? self.normalDelay : self.errorDelay));
                         });
-                    },
+                    };
 
-                    stateChanged: function(state) {
-                        switch (state.newState) {
-                            case $.signalR.connectionState.connecting:
-                                $rootScope.$applyAsync(function () {
-                                    console.log("Connecting");
-                                    connected = false;
-                                    $rootScope.$broadcast("deskHubConnectionState", "connecting");
-                                });
-                                break;
-                            case $.signalR.connectionState.connected:
-                                $rootScope.$applyAsync(function() {
-                                    console.log("Connected");
-                                    connected = true;
-                                    $rootScope.$broadcast("deskHubConnectionState", "connected");
-                                });
-                                break;
-                            case $.signalR.connectionState.reconnecting:
-                                $rootScope.$applyAsync(function() {
-                                    console.log("Reconnecting");
-                                    connected = false;
-                                    $rootScope.$broadcast("deskHubConnectionState", "reconnecting");
-                                });
-                                break;
-                            case $.signalR.connectionState.disconnected:
-                                $rootScope.$applyAsync(function() {
-                                    console.log("Disconnected");
-                                    connected = false;
-                                    $rootScope.$broadcast("deskHubConnectionState", "disconnected");
-                                    scheduleReconnect();
-                                });
-                                break;
-                        }
-                    }
-                });
+                    this.cancel = function () {
+                        self.canceled = true;
+                    };
 
-                function scheduleReconnect() {
-                    console.log("Reconnect scheduled...");
-                    $timeout(function () {
-                        console.log("Call deskHub.connect()");
-                        deskHub.connect();
-                    }, 500);
+                    runDeskChangePolling();
 
-                }
+                    return this;
+                };
+
 
                 return {
 
-                    //WebAPI methods
-
                     createDesk: function (cards) {
-                        return $http.put("api/1.0/desk/", cards).then(function (response) {
+                        return $http.post("api/1.0/desk/", cards).then(function (response) {
                             return response.data;
                         });
                     },
@@ -97,37 +79,41 @@
                         });
                     },
 
+                    getHistory: function (deskName) {
+                        return $q.when([]);
+                    },
+
                     getDesk: function (deskName) {
                         return $http.get("api/1.0/desk/" + deskName).then(function (response) {
                             return response.data;
                         });
                     },
 
-                    //Hub methods
-
                     joinAsUser: function (deskName, userName) {
-                        return $q.when(deskHub.joinAsUser(deskName, userName));
+                        return $http.post("api/1.0/player/" + deskName, { name: userName }).then(function (response) {
+                            return response.data;
+                        });
                     },
-
-                    joinAsMaster: function (deskName) {
-                        return $q.when(deskHub.joinAsMaster(deskName));
-                    },
-
-                    leave: function (deskName) {
-                        return $q.when(deskHub.leave(deskName));
-                    },
-
+                    
                     setUserCard: function (deskName, userName, card) {
-                        return $q.when(deskHub.setUserCard(deskName, userName, card));
+                        return $http.put("api/1.0/player/" + deskName, { name: userName, card: card }).then(function (response) {
+                            return response.data;
+                        });
                     },
 
                     setDeskState: function (deskName, newState) {
-                        return $q.when(deskHub.setDeskState(deskName, newState));
+                        return $http.post("api/1.0/master/" + deskName, newState).then(function (response) {
+                            return response.data;
+                        });
                     },
 
-                    hasConnection: function () {
-                        return connected;
+                    runDeskChangePolling: function (deskName, handler) {
+                        var pollingWorker = new PollingWorker(deskName, handler);
+                        return function() {
+                            pollingWorker.cancel();
+                        }
                     }
+
                 };
             }
         ]);

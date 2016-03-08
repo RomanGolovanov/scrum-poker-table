@@ -1,6 +1,6 @@
 (function () {
     window.angular
-      .module("ScrumPokerTable", ["ngRoute", "ui.bootstrap", "monospaced.qrcode", "angular-clipboard", "SignalR"])
+      .module("ScrumPokerTable", ["ngRoute", "ui.bootstrap", "monospaced.qrcode", "angular-clipboard"])
 
       .config(["$routeProvider", function ($routeProvider) {
 
