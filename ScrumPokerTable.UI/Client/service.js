@@ -84,7 +84,7 @@
                     },
 
                     getDesk: function (deskName) {
-                        return $http.get("api/1.0/desk/" + deskName).then(function (response) {
+                        return $http.get("api/1.0/desk/" + deskName + "?rnd" + (new Date().getTime())).then(function (response) {
                             return response.data;
                         });
                     },
