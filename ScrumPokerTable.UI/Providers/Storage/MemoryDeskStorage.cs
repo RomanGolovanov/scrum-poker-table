@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ScrumPokerTable.UI.Providers.Exceptions;
+﻿using ScrumPokerTable.UI.Providers.Exceptions;
 using ScrumPokerTable.UI.Providers.Storage.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ScrumPokerTable.UI.Providers.Storage
 {
@@ -9,12 +9,17 @@ namespace ScrumPokerTable.UI.Providers.Storage
     {
         public bool IsDeskExists(string deskName)
         {
-            return _desks.Any(x=>x.Name == deskName);
+            return _desks.Any(x => x.Name == deskName);
         }
 
         public DeskEntity GetDesk(string deskName)
         {
             return GetDeskEntity(deskName);
+        }
+
+        public IReadOnlyCollection<DeskEntity> GetDesks()
+        {
+            return _desks;
         }
 
         public void CreateDesk(DeskEntity desk)
@@ -46,6 +51,6 @@ namespace ScrumPokerTable.UI.Providers.Storage
             return desk;
         }
 
-        private readonly List<DeskEntity> _desks = new List<DeskEntity>(); 
+        private readonly List<DeskEntity> _desks = new List<DeskEntity>();
     }
 }
