@@ -2,6 +2,7 @@
 using Microsoft.Practices.Unity;
 using Owin;
 using ScrumPokerTable.UI.IoC;
+using ScrumPokerTable.UI.Providers.Storage;
 
 namespace ScrumPokerTable.UI
 {
@@ -11,6 +12,10 @@ namespace ScrumPokerTable.UI
         {
             var container = UnityContainerFactory.Create();
             ConfigureWebApi(app, container);
+
+            container
+                .Resolve<IDeskStorageCleanupWorker>()
+                .Start();
         }
 
         private static void ConfigureWebApi(IAppBuilder app, IUnityContainer container)
